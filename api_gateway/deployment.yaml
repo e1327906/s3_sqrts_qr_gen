@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway-deployment
+  labels:
+    app: api-gateway-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway-app
+  template:
+    metadata:
+      labels:
+        app: api-gateway-app
+    spec:
+      containers:
+        - name: api-gateway-container
+          image: e1327906/api_gateway:latest
+          ports:
+            - containerPort: 8080
+          #env:
+            #- name: SPRING_PROFILES_ACTIVE
+              #value: "default" # Optional: set Spring profile
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway-service
+spec:
+  selector:
+    app: api-gateway-app
+  ports:
+    - protocol: TCP
+      port: 5500        # Port on which the service will be exposed
+      targetPort: 5500  # Port on which the container is listening
+      nodePort: 31000   # The port on the Node (host) that will be exposed
+  type: NodePort        # Service type to expose the application on a specific Node port

@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qr-gen-deployment
+  labels:
+    app: qr-gen-app
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qr-gen-app
+
+  template:
+    metadata:
+      labels:
+        app: qr-gen-app
+    spec:
+      containers:
+        - name: qr-gen-app
+          #this docker image url set after main.yml file processing completed.
+          image: DOCKER_IMAGE
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: RDS_HOSTNAME
+              value: "qrtsrds.c7qq28y8u55e.ap-southeast-1.rds.amazonaws.com"
+            - name: RDS_USERNAME
+              value: "postgres"
+            - name: RDS_PASSWORD
+              value: "postgres"
+            - name: RDS_PORT
+              value: "5432"
+            - name: RDS_DB_NAME
+              value: "qr_gen_db"
+            - name: ACTIVEMQ_BROKER_URL
+              value: "ssl://b-a01cb658-0359-4600-a9a7-e9131a990e3b-1.mq.ap-southeast-1.amazonaws.com:61617"
+            - name: ACTIVEMQ_USER
+              value: "amq_user"
+            - name: ACTIVEMQ_PASSWORD
+              value: "P@ssw0rd112233445566"
+
+          resources: # Add resource requests and limits
+            requests:
+              cpu: "1000m"       # Minimum CPU request (0.3 cores)
+            limits:
+              cpu: "2000m"       # Maximum CPU limit (0.2 cores)
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1

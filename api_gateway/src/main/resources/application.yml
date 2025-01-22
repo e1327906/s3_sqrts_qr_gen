@@ -1,0 +1,75 @@
+server:
+  port: 5500
+
+spring:
+  application:
+    name: api_gateway
+  profiles:
+    active: default
+  main:
+    web-application-type: reactive
+  cloud:
+    gateway:
+      routes:
+        # Separate route for qr_gen_api
+        - id: qr_gen_api
+          #uri: http://localhost:8071/qr_gen_api  # Backend base path
+          uri: http://qr-gen-service:8071/qr_gen_api
+          predicates:
+            - Path=/tgs/**  # Match the path prefix
+          filters:
+            # eg. Rewrites http://localhost:5500/tgs/api/v1/auth/Authenticate to http://localhost:8071/qr_gen_api/api/v1/auth/Authenticate
+            - RewritePath=/tgs(?<remaining>/.*), /qr_gen_api${remaining}
+
+        # Separate route for pay_api
+        - id: pay_api
+          #uri: http://localhost:8072/pay_api
+          uri: http://pay-api-service:8072/pay_api
+          predicates:
+            - Path=/pay/**  # Match the path prefix
+          filters:
+            - RewritePath=/pay(?<remaining>/.*), /pay_api${remaining}
+        # Separate route for qr_val_api
+        - id: qr_val_api
+          #uri: http://localhost:8073/qr_val_api
+          uri: http://qr-val-service:8073/qr_val_api
+          predicates:
+            - Path=/qrs/**  # Match the path prefix
+          filters:
+            - RewritePath=/qrs(?<remaining>/.*), /qr_val_api${remaining}
+      globalcors:
+        add-to-simple-url-handler-mapping: true
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: false
+
+# Actuator Endpoints
+management:
+  endpoint:
+    gateway:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include:
+          - info
+          - health
+          - gateway
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+app:
+  log:
+    root:
+      path: logs/apps
+    archive:
+      root:
+        path: logs/apps/archive

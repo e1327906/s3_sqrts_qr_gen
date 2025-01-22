@@ -1,0 +1,1 @@
+# Common data transfer objects for all Ticket Generator micro services

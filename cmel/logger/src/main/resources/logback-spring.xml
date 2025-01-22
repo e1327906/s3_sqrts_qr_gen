@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration root="DEBUG">
+
+    <springProfile name="default">
+        <property resource="application.properties" />
+    </springProfile>
+
+    <springProfile name="dev">
+        <property resource="application-dev.properties" />
+    </springProfile>
+
+    <springProfile name="prod">
+        <property resource="application-prod.properties" />
+    </springProfile>
+
+    <springProfile name="test">
+        <property resource="application-test.properties" />
+    </springProfile>
+
+    <property name="APP_NAME" value="${spring.application.name}" />
+    <property name="LOG_PATTERN" value="%d %p %c{1.} [%t] %m%n" />
+    <property name="APP_LOG_ROOT" value="${app.log.root.path}"/>
+    <property name="APP_LOG_ARCH_ROOT" value="${app.log.archive.root.path}"/>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="APP_DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}_debug.log</file>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ARCH_ROOT}/${APP_NAME}_debug-%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <!-- each archived file, size max 2MB -->
+            <maxFileSize>2MB</maxFileSize>
+            <!-- total size of all archive files, if total size > 20GB, it will delete old archived file -->
+            <totalSizeCap>20GB</totalSizeCap>
+            <!-- 60 days to keep -->
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <appender name="APP_INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}_info.log</file>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ARCH_ROOT}/${APP_NAME}_info-%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <!-- each archived file, size max 2MB -->
+            <maxFileSize>2MB</maxFileSize>
+            <!-- total size of all archive files, if total size > 20GB, it will delete old archived file -->
+            <totalSizeCap>20GB</totalSizeCap>
+            <!-- 60 days to keep -->
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <appender name="APP_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}_error.log</file>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ARCH_ROOT}/${APP_NAME}_error-%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <!-- each archived file, size max 2MB -->
+            <maxFileSize>2MB</maxFileSize>
+            <!-- total size of all archive files, if total size > 20GB, it will delete old archived file -->
+            <totalSizeCap>20GB</totalSizeCap>
+            <!-- 60 days to keep -->
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <springProfile name="default">
+        <logger name="com.qre.*" level="DEBUG">
+            <appender-ref ref="APP_DEBUG" />
+            <appender-ref ref="APP_INFO" />
+            <appender-ref ref="APP_ERROR" />
+            <appender-ref ref="console" />
+        </logger>
+    </springProfile>
+
+    <springProfile name="dev">
+        <logger name="com.qre.*" level="DEBUG">
+            <appender-ref ref="APP_DEBUG" />
+            <appender-ref ref="APP_INFO" />
+            <appender-ref ref="APP_ERROR" />
+            <appender-ref ref="console" />
+        </logger>
+    </springProfile>
+
+    <springProfile name="test">
+        <logger name="com.qre.*" level="INFO">
+            <appender-ref ref="APP_DEBUG" />
+            <appender-ref ref="APP_INFO" />
+            <appender-ref ref="APP_ERROR" />
+            <appender-ref ref="console" />
+        </logger>
+    </springProfile>
+
+    <springProfile name="prod">
+        <logger name="com.qre.*" level="INFO" additivity="false">
+            <appender-ref ref="APP_DEBUG" />
+            <appender-ref ref="APP_INFO" />
+            <appender-ref ref="APP_ERROR" />
+            <appender-ref ref="console" />
+        </logger>
+    </springProfile>
+
+    <!-- LOG everything at ERROR level -->
+    <root level="INFO">
+        <appender-ref ref="APP_DEBUG" />
+        <appender-ref ref="APP_INFO" />
+        <appender-ref ref="APP_ERROR" />
+        <appender-ref ref="console" />
+    </root>
+
+</configuration>

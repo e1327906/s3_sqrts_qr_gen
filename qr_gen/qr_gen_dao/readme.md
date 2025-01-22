@@ -1,0 +1,1 @@
+# Common data access objects for all Ticket Generator micro services

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qr-gen-deployment
+  labels:
+    app: qr-gen-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qr-gen-app
+  template:
+    metadata:
+      labels:
+        app: qr-gen-app
+    spec:
+      containers:
+        - name: qr-gen-container
+          image: e1327906/qr_gen:latest
+          ports:
+            - containerPort: 8080
+          #env:
+            #- name: SPRING_PROFILES_ACTIVE
+              #value: "default" # Optional: set Spring profile
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: qr-gen-service
+spec:
+  selector:
+    app: qr-gen-app
+  ports:
+    - protocol: TCP
+      port: 8071        # Port on which the service will be exposed
+      targetPort: 8071  # Port on which the container is listening
+      nodePort: 30100   # The port on the Node (host) that will be exposed
+  type: NodePort        # Service type to expose the application on a specific Node port

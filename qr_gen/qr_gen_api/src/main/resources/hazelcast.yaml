@@ -1,0 +1,12 @@
+hazelcast:
+  cluster-name: qre
+  network:
+    join:
+      multicast:
+        enabled: false
+      kubernetes:
+        enabled: true
+  map:
+    SnoAtomicLong:
+      time-to-live-seconds: 86400
+      max-idle-seconds: 0
