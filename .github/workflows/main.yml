@@ -65,7 +65,7 @@ jobs:
         env:
           GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -DskipTests -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=e1327906_sqrts_qr_gen
+        run: mvn -DskipTests -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=e1327906_s3_sqrts_qr_gen
   snyk:
     needs: build
     runs-on: ubuntu-latest
@@ -79,7 +79,7 @@ jobs:
         with:
           args: --sarif-file-output=snyk.sarif
       - name: Upload result to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: snyk.sarif
   deploy:
