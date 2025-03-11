@@ -1,5 +1,4 @@
-name: CICD TGS AWS EKS
-
+name: CICD TGS AWS-EKS
 on:
   push:
     branches: [ "main" ]
