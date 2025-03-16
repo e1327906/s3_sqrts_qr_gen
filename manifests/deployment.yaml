@@ -25,7 +25,7 @@ spec:
             - containerPort: 8080
           env:
             - name: RDS_HOSTNAME
-              value: "qrtsrds.c7qq28y8u55e.ap-southeast-1.rds.amazonaws.com"
+              value: "qrtsrds.czoqs42aucms.ap-southeast-1.rds.amazonaws.com"
             - name: RDS_USERNAME
               value: "postgres"
             - name: RDS_PASSWORD
@@ -35,7 +35,7 @@ spec:
             - name: RDS_DB_NAME
               value: "qr_gen_db"
             - name: ACTIVEMQ_BROKER_URL
-              value: "ssl://b-a01cb658-0359-4600-a9a7-e9131a990e3b-1.mq.ap-southeast-1.amazonaws.com:61617"
+              value: "ssl://b-0a3cb9ea-788b-4bde-933e-dec0c237dad4-1.mq.ap-southeast-1.amazonaws.com:61617"
             - name: ACTIVEMQ_USER
               value: "amq_user"
             - name: ACTIVEMQ_PASSWORD
