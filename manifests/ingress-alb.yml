@@ -1,0 +1,44 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-alb
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/load-balancer-name: qr-alb
+spec:
+  rules:
+    - host: myapp.example.com   # Replace with your domain or ALB DNS
+      http:
+        paths:
+          - path: /qr-gen
+            pathType: Prefix
+            backend:
+              service:
+                name: qr-gen-service
+                port:
+                  number: 8080
+          - path: /pay-api
+            pathType: Prefix
+            backend:
+              service:
+                name: pay-api-service
+                port:
+                  number: 8080
+          - path: /qr-val
+            pathType: Prefix
+            backend:
+              service:
+                name: qr-val-service
+                port:
+                  number: 8080
+          - path: /fbk-api
+            pathType: Prefix
+            backend:
+              service:
+                name: fbk-api-service
+                port:
+                  number: 8080

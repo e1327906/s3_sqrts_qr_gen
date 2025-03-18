@@ -12,18 +12,4 @@ spec:
     - port: 8080
       targetPort: 8080
 
-  type: LoadBalancer
-
----
-apiVersion: autoscaling/v1
-kind: HorizontalPodAutoscaler
-metadata:
-  name: qr-gen-app
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: qr-gen-deployment
-  minReplicas: 1
-  maxReplicas: 3
-  targetCPUUtilizationPercentage: 80  # Target CPU utilization percentage
+  type: NodePort   # Change LoadBalancer to NodePort
