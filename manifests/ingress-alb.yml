@@ -4,14 +4,14 @@ metadata:
   name: ingress-alb
   namespace: default
   annotations:
-    kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
     alb.ingress.kubernetes.io/load-balancer-name: qr-alb
 spec:
+  ingressClassName: alb  # Use this to associate with the ALB Ingress Controller
   rules:
-    - host: myapp.example.com   # Replace with your domain or ALB DNS
+    - host: myapp.example.com  # Replace with your actual domain or ALB DNS
       http:
         paths:
           - path: /qr-gen
