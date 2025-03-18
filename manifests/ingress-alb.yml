@@ -11,7 +11,7 @@ metadata:
 spec:
   ingressClassName: alb  # Use this to associate with the ALB Ingress Controller
   rules:
-    - host: myapp.example.com  # Replace with your actual domain or ALB DNS
+    - host: qr-alb-114390155.ap-southeast-1.elb.amazonaws.com
       http:
         paths:
           - path: /qr-gen
