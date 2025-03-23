@@ -110,10 +110,13 @@ public class TicketServiceImpl implements TicketService {
                 .additionalInfo(AdditionalInfo.builder().build())
                 .build();
         Map<String, Object> ticketJsonData = prepareTicketJsonData(ticketMaster);
+
+        byte[] encryptedData = prepareQRData(ticketJsonData);
+
         ticketMaster.setSecurity(Security.builder()
-                .digitalSignature(generateDigitalSignature(ticketJsonData))
+                .digitalSignature(generateDigitalSignatureV1(Base64.getEncoder().encodeToString(encryptedData)))
                 .build());
-        ticketMaster.setQrData(prepareQRData(ticketJsonData));
+        ticketMaster.setQrData(encryptedData);
         ticketMaster.setCreatedDatetime(new Date());
         TicketMaster newTicketData = ticketMasterRepository.save(ticketMaster);
 
@@ -331,6 +334,14 @@ public class TicketServiceImpl implements TicketService {
 
         String jsonString = new ObjectMapper().writeValueAsString(ticket);
         byte[] signData = digitalSignature.signingL2(jsonString,
+                crypto.getPrivateKey(applicationProperties.getPrivateKeyPath()));
+        return Base64.getEncoder().encodeToString(signData);
+
+    }
+
+    public String generateDigitalSignatureV1(String strEncodeQRData) throws Exception {
+
+        byte[] signData = digitalSignature.signingL2(strEncodeQRData,
                 crypto.getPrivateKey(applicationProperties.getPrivateKeyPath()));
         return Base64.getEncoder().encodeToString(signData);
 

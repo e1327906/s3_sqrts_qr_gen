@@ -26,4 +26,6 @@ public interface TicketService{
     Optional<TicketMaster> findBySerialNumber(String serialNumber);
 
     void updateTicketStatus(TicketUpdateStatusRequest request);
+
+    String generateDigitalSignatureV1(String strEncodeQRData) throws Exception;
 }

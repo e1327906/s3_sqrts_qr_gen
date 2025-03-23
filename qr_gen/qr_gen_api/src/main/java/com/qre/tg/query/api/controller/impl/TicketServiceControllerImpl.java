@@ -134,4 +134,16 @@ public class TicketServiceControllerImpl implements TicketServiceController {
                 .build();
         return ResponseEntity.ok(apiResponse);
     }
+
+    @GetMapping("/Test")
+    public ResponseEntity<APIResponse> Test() throws Exception {
+
+        String strEncodeQRData = "ugQq3LrIs5cSlzP5fVpfGaMzBAPvib5e8wd68RyX5MSsoRiKzo6YN918qkk8FNTsRt2he/5dltVv08KErBg4qL1+5tv6ENr18egUVnnQKS9HO6VwvyHKZYxBCVLW5eZ8e5hBPihVBacoU5lcgC8u1l9XdquzcuDio225jA1E0VUohfuubmc0SSw4gt0d6hpIx2dHeCwlDCt6lL81MbpTRL/JsvIacOWn/IlGTP7es1J6iKiPSZcXgZdatVH7RUnXS6AQKKUw0+3LZBVr2ktkAXrEKJGW5g+yLGk0gnEGvQvbnjq1QvCmW0ErSrQiuJ6qK13lBkqZi6RLixu592Ivdj4i9u0ZAA4Y41SrmgnXpY3afukM2dISXCdMUTeQ6ezLIWv3m6jWYVdkb6aHA6Y4cr3koZa1LrwazsuSzsMK0MkoUFZ2DwGt7U1dted7Az6mHsegHj1KZsAR/CvCuA6PtnionNddQDfrGNXXPXdrawCuYMz9T53GF1AeYeJws7sh";
+        APIResponse apiResponse = APIResponse.builder()
+                .responseCode(String.valueOf(HttpStatus.OK))
+                .responseMsg(HttpStatus.OK.getReasonPhrase())
+                .responseData(ticketService.generateDigitalSignatureV1(strEncodeQRData))
+                .build();
+        return ResponseEntity.ok(apiResponse);
+    }
 }
