@@ -52,4 +52,15 @@ public class UserControllerImpl implements UserController {
                 .build();
         return ResponseEntity.ok(apiResponse);
     }
+
+    @GetMapping("/AllUsers")
+    @Override
+    public ResponseEntity<APIResponse> getAllCognitoUsers() {
+        APIResponse apiResponse = APIResponse.builder()
+                .responseCode(String.valueOf(HttpStatus.OK))
+                .responseMsg(HttpStatus.OK.getReasonPhrase())
+                .responseData(service.getAllCognitoUsers())
+                .build();
+        return ResponseEntity.ok(apiResponse);
+    }
 }

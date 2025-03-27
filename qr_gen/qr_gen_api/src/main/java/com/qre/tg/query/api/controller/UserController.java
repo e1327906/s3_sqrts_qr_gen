@@ -17,4 +17,6 @@ public interface UserController {
 
     ResponseEntity<APIResponse> getAllUser();
 
+    ResponseEntity<APIResponse> getAllCognitoUsers();
+
 }
